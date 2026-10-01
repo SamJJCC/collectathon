@@ -1,7 +1,7 @@
 A place to write your findings and plans
 
-## Understanding
-
+## Understanding 
+-
 
 ## Planning required changes
 
