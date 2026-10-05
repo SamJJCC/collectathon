@@ -77,6 +77,11 @@ int main()
         {
             player.set_y(player.y() + SPEED);
         }
+        if(bn::keypad::start_pressed()){
+            score=0;
+            player.set_position(player_x,player_y);
+            treasure.set_position(treasure_x,treasure_y);
+        }
 
         // The bounding boxes of the player and treasure, snapped to integer pixels
         bn::rect player_rect = bn::rect(player.x().round_integer(),
