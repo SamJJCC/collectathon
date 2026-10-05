@@ -22,6 +22,11 @@ static constexpr bn::fixed SPEED = 3;
 static constexpr bn::size PLAYER_SIZE = {8, 8};
 static constexpr bn::size TREASURE_SIZE = {8, 8};
 
+// changing player and treasure position
+static constexpr int player_x = 50;
+static constexpr int player_y = -30;
+static constexpr int treasure_x = -30;
+static constexpr int treasure_y = 20;
 // Full bounds of the screen
 static constexpr int MIN_Y = -bn::display::height() / 2;
 static constexpr int MAX_Y = bn::display::height() / 2;
@@ -49,12 +54,13 @@ int main()
 
     int score = 0;
 
-    bn::sprite_ptr player = bn::sprite_items::square.create_sprite(-50, 50);
-    bn::sprite_ptr treasure = bn::sprite_items::dot.create_sprite(0, 0);
+    bn::sprite_ptr player = bn::sprite_items::square.create_sprite(player_x, player_y);
+    bn::sprite_ptr treasure = bn::sprite_items::dot.create_sprite(treasure_x, treasure_y);
 
     while (true)
     {
         // Move player with d-pad
+
         if (bn::keypad::left_held())
         {
             player.set_x(player.x() - SPEED);
