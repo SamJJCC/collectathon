@@ -63,13 +63,14 @@ int main()
     int score = 0;
     int timer= 0;
     int speed_boost_count =0;
+    bool speed_boost_activate=true;
 
     bn::sprite_ptr player = bn::sprite_items::square.create_sprite(player_x, player_y);
     bn::sprite_ptr treasure = bn::sprite_items::dot.create_sprite(treasure_x, treasure_y);
 
     while (true)
     {
-        timer++;
+        
         // Move player with d-pad
 
         if (bn::keypad::left_held())
@@ -91,20 +92,36 @@ int main()
         if(bn::keypad::start_pressed()){
             score=0;
             speed_boost_count=3;
+            timer=0;
+            speed_boost_activate = false;
             player.set_position(player_x,player_y);
             treasure.set_position(treasure_x,treasure_y);
         }
 
         // speed change 
-        if(bn::keypad::a_pressed() && bn::keypad::right_held() ){
-           player.set_x(player.x() + new_speed);
-           if(timer=300){
-             player.set_x(player.x() + SPEED);
-           }
-           speed_boost_count++;
+        if(bn::keypad::a_pressed() && speed_boost_count>0 ){
+           timer=0;
+             speed_boost_activate= true;
+           speed_boost_count--;
+        }
+
+        if(speed_boost_activate){
+            timer++;
+
+            if(timer>=300){
+                speed_boost_activate = false;
+            }
         }
         
-        if(bn::keypad::a_held() && bn::keypad::left_held() ){
+        if(bn::keypad::right_held()){
+            if(speed_boost_activate){
+                player.set_x(player.x() + SPEED);
+            }
+            else{
+                player.set_x(player.x() + new_speed);
+            }
+        }
+        /*if(bn::keypad::a_held() && bn::keypad::left_held() ){
            player.set_x(player.x() - new_speed);
            speed_boost_count++;
         }
@@ -115,8 +132,33 @@ int main()
         if(bn::keypad::a_held() && bn::keypad::down_held() ){
            player.set_y(player.y() + new_speed);
            speed_boost_count++;
-        }
+        }*/
         
+        if (bn::keypad::start_pressed())
+        {
+            score = 0;
+            player.set_position(player_x, player_y);
+            treasure.set_position(treasure_x, treasure_y);
+        }
+        // .x returns the horizontal position of the sprite
+        // If the sprite moves to the left, it will come back to the right.
+        if (player.x() < MIN_X)
+        {
+            // .set_x sets the horizontal position of the sprite
+            // just using the max/min/ already available
+            player.set_x(MAX_Y);
+        }
+
+        // if sprite moves to the right, it will come back on the left
+        if (player.x() > MAX_Y)
+        {
+            player.set_x(MIN_X);
+        }
+        // if sprite goes up,will show up again at the bottom
+        if (player.y() < MIN_X)
+        {
+            player.set_y(MAX_Y);
+        }
         // The bounding boxes of the player and treasure, snapped to integer pixels
         bn::rect player_rect = bn::rect(player.x().round_integer(),
                                         player.y().round_integer(),
