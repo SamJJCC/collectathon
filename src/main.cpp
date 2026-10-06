@@ -155,9 +155,15 @@ int main()
             player.set_x(MIN_X);
         }
         // if sprite goes up,will show up again at the bottom
+        // .y returns the vertical position of the sprite
         if (player.y() < MIN_X)
         {
+            // .set_y will set the vertical position of the sprite
             player.set_y(MAX_Y);
+        }
+        // if sprite goes down it will come back from top of screen
+        if(player.y()>MAX_Y){
+            player.set_y(MIN_X);
         }
         // The bounding boxes of the player and treasure, snapped to integer pixels
         bn::rect player_rect = bn::rect(player.x().round_integer(),
