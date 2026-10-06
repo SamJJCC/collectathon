@@ -81,17 +81,37 @@ int main()
             else{
             player.set_x(player.x() - SPEED);}
         }
+
+
         if (bn::keypad::right_held())
         {
-            player.set_x(player.x() + SPEED);
+            if(speed_boost_activate){
+                player.set_x(player.x() + new_speed);
+            }
+            else{
+                player.set_x(player.x() + SPEED);}
         }
+
+
         if (bn::keypad::up_held())
         {
-            player.set_y(player.y() - SPEED);
+
+            if(speed_boost_activate){
+                player.set_y(player.y() - new_speed);
+            }
+            else{
+            player.set_y(player.y() - SPEED);}
         }
+
+
         if (bn::keypad::down_held())
         {
-            player.set_y(player.y() + SPEED);
+            if(speed_boost_activate){
+                player.set_y(player.y() + new_speed);
+            }
+            else{
+            player.set_y(player.y() + SPEED);}
+            
         }
 
         // Restarting game///
