@@ -17,7 +17,7 @@
 
 // Pixels / Frame player moves at
 static constexpr bn::fixed SPEED = 3;
-bn::fixed new_speed = SPEED*2;
+ static constexpr bn::fixed new_speed = SPEED*2;
 
 // Width and height of the the player and treasure bounding boxes
 static constexpr bn::size PLAYER_SIZE = {8, 8};
@@ -43,8 +43,7 @@ static constexpr int MAX_SCORE_CHARS = 11;
 // Score location
 static constexpr int SCORE_X = 70;
 static constexpr int SCORE_Y = -70;
-//static constexpr int SPEED_BOOST_X = -70;
-//static constexpr int SPEED_BOOST_Y = -70;
+
 
 
 int main()
@@ -62,8 +61,8 @@ int main()
 
     int score = 0;
     int timer= 0;
-    int speed_boost_count =0;
-    bool speed_boost_activate=true;
+    int speed_boost_count =3;
+    bool speed_boost_activate=false;
 
     bn::sprite_ptr player = bn::sprite_items::square.create_sprite(player_x, player_y);
     bn::sprite_ptr treasure = bn::sprite_items::dot.create_sprite(treasure_x, treasure_y);
@@ -72,10 +71,15 @@ int main()
     {
         
         // Move player with d-pad
+        
 
         if (bn::keypad::left_held())
         {
-            player.set_x(player.x() - SPEED);
+            if(speed_boost_activate){
+                player.set_x(player.x() - new_speed);
+            }
+            else{
+            player.set_x(player.x() - SPEED);}
         }
         if (bn::keypad::right_held())
         {
@@ -89,6 +93,8 @@ int main()
         {
             player.set_y(player.y() + SPEED);
         }
+
+        // Restarting game///
         if(bn::keypad::start_pressed()){
             score=0;
             speed_boost_count=3;
@@ -98,29 +104,32 @@ int main()
             treasure.set_position(treasure_x,treasure_y);
         }
 
-        // speed change 
+        // speed changed when a is pressed
         if(bn::keypad::a_pressed() && speed_boost_count>0 ){
            timer=0;
              speed_boost_activate= true;
            speed_boost_count--;
         }
-
+        //speed boost timer/
         if(speed_boost_activate){
             timer++;
 
             if(timer>=300){
                 speed_boost_activate = false;
+                timer=0;
             }
         }
         
-        if(bn::keypad::right_held()){
-            if(speed_boost_activate){
-                player.set_x(player.x() + SPEED);
-            }
-            else{
-                player.set_x(player.x() + new_speed);
-            }
-        }
+        // if(bn::keypad::right_held()){
+        //     if(speed_boost_activate){
+        //         player.set_x(player.x() + SPEED);
+        //     }
+        //     else{
+        //         player.set_x(player.x() + new_speed);
+        //     }
+        // }
+
+
         /*if(bn::keypad::a_held() && bn::keypad::left_held() ){
            player.set_x(player.x() - new_speed);
            speed_boost_count++;
@@ -134,36 +143,31 @@ int main()
            speed_boost_count++;
         }*/
         
-        if (bn::keypad::start_pressed())
-        {
-            score = 0;
-            player.set_position(player_x, player_y);
-            treasure.set_position(treasure_x, treasure_y);
-        }
+      
         // .x returns the horizontal position of the sprite
         // If the sprite moves to the left, it will come back to the right.
         if (player.x() < MIN_X)
         {
             // .set_x sets the horizontal position of the sprite
             // just using the max/min/ already available
-            player.set_x(MAX_Y);
+            player.set_x(MAX_X);
         }
 
         // if sprite moves to the right, it will come back on the left
-        if (player.x() > MAX_Y)
+        if (player.x() > MAX_X)
         {
             player.set_x(MIN_X);
         }
         // if sprite goes up,will show up again at the bottom
         // .y returns the vertical position of the sprite
-        if (player.y() < MIN_X)
+        if (player.y() < MIN_Y)
         {
             // .set_y will set the vertical position of the sprite
             player.set_y(MAX_Y);
         }
         // if sprite goes down it will come back from top of screen
         if(player.y()>MAX_Y){
-            player.set_y(MIN_X);
+            player.set_y(MIN_Y);
         }
         // The bounding boxes of the player and treasure, snapped to integer pixels
         bn::rect player_rect = bn::rect(player.x().round_integer(),
@@ -193,11 +197,7 @@ int main()
                                 score_string,
                                 score_sprites);
 
-        // Update boosts
-         //bn::string<MAX_SPEED_BOOST_CHARS> speed_boost_string = bn::to_string<MAX_SPEED_BOOST_CHARS>(speed_boost_count);
-         //text_generator.generate(SPEED_BOOST_X, SPEED_BOOST_Y,
-                                //speed_boost_string,
-                                //speed_boosts);
+       
         // Update RNG seed every frame so we don't get the same sequence of positions every time
         rng.update();
 
