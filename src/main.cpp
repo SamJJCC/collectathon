@@ -36,13 +36,17 @@ static constexpr int MAX_X = bn::display::width() / 2;
 
 // Number of characters required to show the longest numer possible in an int (-2147483647)
 static constexpr int MAX_SCORE_CHARS = 11;
-//static constexpr int MAX_SPEED_BOOST_CHARS = 11;
+static constexpr int MAX_SPEED_BOOST_CHARS = 11;
 
 
 
 // Score location
 static constexpr int SCORE_X = 70;
 static constexpr int SCORE_Y = -70;
+
+static constexpr int SPEEDCOUNT_X = -70;
+static constexpr int SPEEDCOUNT_Y = 70;
+
 
 
 
@@ -56,8 +60,10 @@ int main()
 
     // Will hold the sprites for the score
     bn::vector<bn::sprite_ptr, MAX_SCORE_CHARS> score_sprites = {};
-    //bn::vector<bn::sprite_ptr, MAX_SPEED_BOOST_CHARS> speed_boosts = {};
+    bn::vector<bn::sprite_ptr, MAX_SPEED_BOOST_CHARS> speed_boosts = {};
     bn::sprite_text_generator text_generator(common::fixed_8x16_sprite_font);
+   // bn::sprite_text_generator text_generator(common::fixed_8x16_sprite_font);
+    
 
     int score = 0;
     int timer= 0;
@@ -122,6 +128,7 @@ int main()
             speed_boost_activate = false;
             player.set_position(player_x,player_y);
             treasure.set_position(treasure_x,treasure_y);
+            
         }
 
         // speed changed when a is pressed
@@ -216,6 +223,12 @@ int main()
         text_generator.generate(SCORE_X, SCORE_Y,
                                 score_string,
                                 score_sprites);
+
+         bn::string<MAX_SPEED_BOOST_CHARS> speedboost_string = bn::to_string<MAX_SPEED_BOOST_CHARS>(speed_boost_count);
+        speed_boosts.clear();
+        text_generator.generate(SPEEDCOUNT_X, SPEEDCOUNT_Y,
+                                speedboost_string,
+                                speed_boosts);
 
        
         // Update RNG seed every frame so we don't get the same sequence of positions every time
