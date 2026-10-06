@@ -77,10 +77,30 @@ int main()
         {
             player.set_y(player.y() + SPEED);
         }
-        if(bn::keypad::start_pressed()){
-            score=0;
-            player.set_position(player_x,player_y);
-            treasure.set_position(treasure_x,treasure_y);
+        if (bn::keypad::start_pressed())
+        {
+            score = 0;
+            player.set_position(player_x, player_y);
+            treasure.set_position(treasure_x, treasure_y);
+        }
+        // .x returns the horizontal position of the sprite
+        // If the sprite moves to the left, it will come back to the right.
+        if (player.x() < MIN_X)
+        {
+            // .set_x sets the horizontal position of the sprite
+            // just using the max/min/ already available
+            player.set_x(MAX_Y);
+        }
+
+        // if sprite moves to the right, it will come back on the left
+        if (player.x() > MAX_Y)
+        {
+            player.set_x(MIN_X);
+        }
+        // if sprite goes up,will show up again at the bottom
+        if (player.y() < MIN_X)
+        {
+            player.set_y(MAX_Y);
         }
         // The bounding boxes of the player and treasure, snapped to integer pixels
         bn::rect player_rect = bn::rect(player.x().round_integer(),
