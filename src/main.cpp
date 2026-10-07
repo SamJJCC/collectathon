@@ -15,6 +15,7 @@
 #include "bn_sprite_items_square.h"
 #include "common_fixed_8x16_font.h"
 
+
 // Pixels / Frame player moves at
 static constexpr bn::fixed SPEED = 3;
  static constexpr bn::fixed new_speed = SPEED*2;
@@ -37,6 +38,7 @@ static constexpr int MAX_X = bn::display::width() / 2;
 // Number of characters required to show the longest numer possible in an int (-2147483647)
 static constexpr int MAX_SCORE_CHARS = 11;
 static constexpr int MAX_SPEED_BOOST_CHARS = 11;
+static constexpr int BOOST_FLASH = 11;
 
 
 
@@ -60,9 +62,10 @@ int main()
 
     // Will hold the sprites for the score
     bn::vector<bn::sprite_ptr, MAX_SCORE_CHARS> score_sprites = {};
+    bn::vector<bn::sprite_ptr, BOOST_FLASH> boost_word= {};
     bn::vector<bn::sprite_ptr, MAX_SPEED_BOOST_CHARS> speed_boosts = {};
     bn::sprite_text_generator text_generator(common::fixed_8x16_sprite_font);
-   // bn::sprite_text_generator text_generator(common::fixed_8x16_sprite_font);
+   //bn::sprite_text_generator text_generator(common::fixed_32x64_sprite_font.h);
     
 
     int score = 0;
@@ -133,6 +136,7 @@ int main()
 
         // speed changed when a is pressed
         if(bn::keypad::a_pressed() && speed_boost_count>0 ){
+        text_generator.generate(0, 0, "BOOST!", boost_word);
            timer=0;
              speed_boost_activate= true;
            speed_boost_count--;
@@ -143,6 +147,7 @@ int main()
 
             if(timer>=300){
                 speed_boost_activate = false;
+                boost_word.clear();
                 timer=0;
             }
         }
