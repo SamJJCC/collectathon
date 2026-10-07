@@ -14,6 +14,7 @@
 #include "bn_sprite_items_dot.h"
 #include "bn_sprite_items_square.h"
 #include "common_fixed_8x16_font.h"
+//#include "bn_sprite_items_variable_8x16_font_red.h"
 
 
 // Pixels / Frame player moves at
@@ -60,7 +61,7 @@ int main()
 
     bn::random rng = bn::random();
 
-    // Will hold the sprites for the score
+    // Will hold the sprites for the score, boost word, and speed boost count
     bn::vector<bn::sprite_ptr, MAX_SCORE_CHARS> score_sprites = {};
     bn::vector<bn::sprite_ptr, BOOST_FLASH> boost_word= {};
     bn::vector<bn::sprite_ptr, MAX_SPEED_BOOST_CHARS> speed_boosts = {};
