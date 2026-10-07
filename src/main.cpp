@@ -15,10 +15,9 @@
 #include "bn_sprite_items_square.h"
 #include "common_fixed_8x16_font.h"
 
-
 // Pixels / Frame player moves at
 static constexpr bn::fixed SPEED = 3;
- static constexpr bn::fixed new_speed = SPEED*2;
+static constexpr bn::fixed new_speed = SPEED * 2;
 
 // Width and height of the the player and treasure bounding boxes
 static constexpr bn::size PLAYER_SIZE = {8, 8};
@@ -40,17 +39,12 @@ static constexpr int MAX_SCORE_CHARS = 11;
 static constexpr int MAX_SPEED_BOOST_CHARS = 11;
 static constexpr int BOOST_FLASH = 11;
 
-
-
 // Score location
 static constexpr int SCORE_X = 70;
 static constexpr int SCORE_Y = -70;
 
 static constexpr int SPEEDCOUNT_X = -70;
 static constexpr int SPEEDCOUNT_Y = 70;
-
-
-
 
 int main()
 {
@@ -62,97 +56,136 @@ int main()
 
     // Will hold the sprites for the score
     bn::vector<bn::sprite_ptr, MAX_SCORE_CHARS> score_sprites = {};
-    bn::vector<bn::sprite_ptr, BOOST_FLASH> boost_word= {};
+    bn::vector<bn::sprite_ptr, BOOST_FLASH> boost_word = {};
     bn::vector<bn::sprite_ptr, MAX_SPEED_BOOST_CHARS> speed_boosts = {};
     bn::sprite_text_generator text_generator(common::fixed_8x16_sprite_font);
-   //bn::sprite_text_generator text_generator(common::fixed_32x64_sprite_font.h);
-    
+    // bn::sprite_text_generator text_generator(common::fixed_32x64_sprite_font.h);
 
     int score = 0;
-    int timer= 0;
-    int speed_boost_count =3;
-    bool speed_boost_activate=false;
+    int timer = 0;
+    int speed_boost_count = 3;
+    bool speed_boost_activate = false;
 
     bn::sprite_ptr player = bn::sprite_items::square.create_sprite(player_x, player_y);
     bn::sprite_ptr treasure = bn::sprite_items::dot.create_sprite(treasure_x, treasure_y);
 
     while (true)
     {
-        
+
         // Move player with d-pad
-        
 
         if (bn::keypad::left_held())
         {
-            if(speed_boost_activate){
+            if (speed_boost_activate)
+            {
                 player.set_x(player.x() - new_speed);
             }
-            else{
-            player.set_x(player.x() - SPEED);}
+            else
+            {
+                player.set_x(player.x() - SPEED);
+            }
         }
-
 
         if (bn::keypad::right_held())
         {
-            if(speed_boost_activate){
+            if (speed_boost_activate)
+            {
                 player.set_x(player.x() + new_speed);
             }
-            else{
-                player.set_x(player.x() + SPEED);}
+            else
+            {
+                player.set_x(player.x() + SPEED);
+            }
         }
-
 
         if (bn::keypad::up_held())
         {
 
-            if(speed_boost_activate){
+            if (speed_boost_activate)
+            {
                 player.set_y(player.y() - new_speed);
             }
-            else{
-            player.set_y(player.y() - SPEED);}
+            else
+            {
+                player.set_y(player.y() - SPEED);
+            }
         }
-
 
         if (bn::keypad::down_held())
         {
-            if(speed_boost_activate){
+            if (speed_boost_activate)
+            {
                 player.set_y(player.y() + new_speed);
             }
-            else{
-            player.set_y(player.y() + SPEED);}
-            
+            else
+            {
+                player.set_y(player.y() + SPEED);
+            }
         }
 
         // Restarting game///
-        if(bn::keypad::start_pressed()){
-            score=0;
-            speed_boost_count=3;
-            timer=0;
+        if (bn::keypad::start_pressed())
+        {
+            score = 0;
+            speed_boost_count = 3;
+            timer = 0;
             speed_boost_activate = false;
-            player.set_position(player_x,player_y);
-            treasure.set_position(treasure_x,treasure_y);
-            
+            player.set_position(player_x, player_y);
+            treasure.set_position(treasure_x, treasure_y);
+            player.set_rotation_angle(0);
+            bn::backdrop::set_color(bn::color(30, 15, 0));
         }
 
         // speed changed when a is pressed
-        if(bn::keypad::a_pressed() && speed_boost_count>0 ){
-        text_generator.generate(0, 0, "BOOST!", boost_word);
-           timer=0;
-             speed_boost_activate= true;
-           speed_boost_count--;
-        }
-        //speed boost timer/
-        if(speed_boost_activate){
-            timer++;
+        if (bn::keypad::a_pressed() && speed_boost_count > 0)
+        {
+            text_generator.generate(0, 0, "BOOST!", boost_word);
+            timer = 0;
+            speed_boost_activate = true;
+            speed_boost_count--;
 
-            if(timer>=300){
-                speed_boost_activate = false;
-                boost_word.clear();
-                timer=0;
+            // changing backdrop colors when boost is active
+            // will randomly generate between theses colors
+            int color = rng.get_int(0, 4);
+            if (color == 0)
+            {
+                // pink
+                bn::backdrop::set_color(bn::color(31, 3, 18));
+            }
+            else if (color == 1)
+            {
+                // bright blue
+                bn::backdrop::set_color(bn::color(0, 31, 31));
+            }
+            else if (color == 2)
+            {
+                // blue
+                bn::backdrop::set_color(bn::color(0, 15, 31));
+            }
+            else if (color == 3)
+            {
+                // purple
+                bn::backdrop::set_color(bn::color(20, 0, 31));
             }
         }
-        
-        // if(bn::keypad::right_held()){
+        // speed boost timer/
+        if (speed_boost_activate)
+        {
+            timer++;
+            player.set_rotation_angle(20);
+            // once timer is done
+            if (timer >= 300)
+            {
+                speed_boost_activate = false;
+                boost_word.clear();
+                timer = 0;
+                player.set_rotation_angle(0);
+                bn::backdrop::set_color(bn::color(30, 15, 0));
+            }
+        }
+        // if the speed boost is active, the player square will change angles and look different
+
+                // if(bn::keypad::right_held()){
         //     if(speed_boost_activate){
         //         player.set_x(player.x() + SPEED);
         //     }
@@ -160,7 +193,6 @@ int main()
         //         player.set_x(player.x() + new_speed);
         //     }
         // }
-
 
         /*if(bn::keypad::a_held() && bn::keypad::left_held() ){
            player.set_x(player.x() - new_speed);
@@ -174,8 +206,7 @@ int main()
            player.set_y(player.y() + new_speed);
            speed_boost_count++;
         }*/
-        
-      
+
         // .x returns the horizontal position of the sprite
         // If the sprite moves to the left, it will come back to the right.
         if (player.x() < MIN_X)
@@ -198,7 +229,8 @@ int main()
             player.set_y(MAX_Y);
         }
         // if sprite goes down it will come back from top of screen
-        if(player.y()>MAX_Y){
+        if (player.y() > MAX_Y)
+        {
             player.set_y(MIN_Y);
         }
         // The bounding boxes of the player and treasure, snapped to integer pixels
@@ -228,15 +260,13 @@ int main()
         text_generator.generate(SCORE_X, SCORE_Y,
                                 score_string,
                                 score_sprites);
-                                                        
 
-         bn::string<MAX_SPEED_BOOST_CHARS> speedboost_string = bn::to_string<MAX_SPEED_BOOST_CHARS>(speed_boost_count);
+        bn::string<MAX_SPEED_BOOST_CHARS> speedboost_string = bn::to_string<MAX_SPEED_BOOST_CHARS>(speed_boost_count);
         speed_boosts.clear();
         text_generator.generate(SPEEDCOUNT_X, SPEEDCOUNT_Y,
                                 speedboost_string,
                                 speed_boosts);
 
-       
         // Update RNG seed every frame so we don't get the same sequence of positions every time
         rng.update();
 
