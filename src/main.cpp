@@ -223,6 +223,7 @@ int main()
         text_generator.generate(SCORE_X, SCORE_Y,
                                 score_string,
                                 score_sprites);
+                                                        
 
          bn::string<MAX_SPEED_BOOST_CHARS> speedboost_string = bn::to_string<MAX_SPEED_BOOST_CHARS>(speed_boost_count);
         speed_boosts.clear();
