@@ -14,6 +14,7 @@
 #include "bn_sprite_items_dot.h"
 #include "bn_sprite_items_square.h"
 #include "common_fixed_8x16_font.h"
+#include "bn_sprite_items_alien.h"
 //#include "bn_sprite_items_variable_8x16_font_red.h"
 
 // Pixels / Frame player moves at
@@ -66,6 +67,8 @@ int main()
     int timer = 0;
     int speed_boost_count = 3;
     bool speed_boost_activate = false;
+
+    bn::sprite_ptr sline=bn::sprite_items::alien.create_sprite();
 
     bn::sprite_ptr player = bn::sprite_items::square.create_sprite(player_x, player_y);
     bn::sprite_ptr treasure = bn::sprite_items::dot.create_sprite(treasure_x, treasure_y);
