@@ -22,12 +22,12 @@ static constexpr bn::fixed SPEED = 3;
 static constexpr bn::fixed new_speed = SPEED * 2;
 
 // Width and height of the the player and treasure bounding boxes
-static constexpr bn::size PLAYER_SIZE = {8, 8};
+static constexpr bn::size PLAYER_SIZE = {16, 16};
 static constexpr bn::size TREASURE_SIZE = {8, 8};
 
 // changing player and treasure position
-static constexpr int player_x = 50;
-static constexpr int player_y = -30;
+static constexpr int alien_x = 50;
+static constexpr int alien_y = -30;
 static constexpr int treasure_x = -30;
 static constexpr int treasure_y = 20;
 // Full bounds of the screen
@@ -68,9 +68,9 @@ int main()
     int speed_boost_count = 3;
     bool speed_boost_activate = false;
 
-    bn::sprite_ptr sline=bn::sprite_items::alien.create_sprite();
+   //bn::sprite_ptr alien=bn::sprite_items::alien.create_sprite();
 
-    bn::sprite_ptr player = bn::sprite_items::square.create_sprite(player_x, player_y);
+    bn::sprite_ptr alien = bn::sprite_items::alien.create_sprite(alien_x, alien_y);
     bn::sprite_ptr treasure = bn::sprite_items::dot.create_sprite(treasure_x, treasure_y);
 
     while (true)
@@ -82,11 +82,11 @@ int main()
         {
             if (speed_boost_activate)
             {
-                player.set_x(player.x() - new_speed);
+                alien.set_x(alien.x() - new_speed);
             }
             else
             {
-                player.set_x(player.x() - SPEED);
+                alien.set_x(alien.x() - SPEED);
             }
         }
 
@@ -94,11 +94,11 @@ int main()
         {
             if (speed_boost_activate)
             {
-                player.set_x(player.x() + new_speed);
+                alien.set_x(alien.x() + new_speed);
             }
             else
             {
-                player.set_x(player.x() + SPEED);
+                alien.set_x(alien.x() + SPEED);
             }
         }
 
@@ -107,11 +107,11 @@ int main()
 
             if (speed_boost_activate)
             {
-                player.set_y(player.y() - new_speed);
+                alien.set_y(alien.y() - new_speed);
             }
             else
             {
-                player.set_y(player.y() - SPEED);
+                alien.set_y(alien.y() - SPEED);
             }
         }
 
@@ -119,11 +119,11 @@ int main()
         {
             if (speed_boost_activate)
             {
-                player.set_y(player.y() + new_speed);
+                alien.set_y(alien.y() + new_speed);
             }
             else
             {
-                player.set_y(player.y() + SPEED);
+                alien.set_y(alien.y() + SPEED);
             }
         }
 
@@ -134,9 +134,9 @@ int main()
             speed_boost_count = 3;
             timer = 0;
             speed_boost_activate = false;
-            player.set_position(player_x, player_y);
+            alien.set_position(alien_x, alien_y);
             treasure.set_position(treasure_x, treasure_y);
-            player.set_rotation_angle(0);
+            alien.set_rotation_angle(0);
             bn::backdrop::set_color(bn::color(30, 15, 0));
         }
 
@@ -176,70 +176,47 @@ int main()
         if (speed_boost_activate)
         {
             timer++;
-            player.set_rotation_angle(20);
+            alien.set_rotation_angle(25);
             // once timer is done
             if (timer >= 300)
             {
                 speed_boost_activate = false;
                 boost_word.clear();
                 timer = 0;
-                player.set_rotation_angle(0);
+                alien.set_rotation_angle(0);
                 bn::backdrop::set_color(bn::color(30, 15, 0));
             }
         }
-        // if the speed boost is active, the player square will change angles and look different
-
-                // if(bn::keypad::right_held()){
-        //     if(speed_boost_activate){
-        //         player.set_x(player.x() + SPEED);
-        //     }
-        //     else{
-        //         player.set_x(player.x() + new_speed);
-        //     }
-        // }
-
-        /*if(bn::keypad::a_held() && bn::keypad::left_held() ){
-           player.set_x(player.x() - new_speed);
-           speed_boost_count++;
-        }
-        if(bn::keypad::a_held() && bn::keypad::up_held() ){
-           player.set_y(player.y() - new_speed);
-           speed_boost_count++;
-        }
-        if(bn::keypad::a_held() && bn::keypad::down_held() ){
-           player.set_y(player.y() + new_speed);
-           speed_boost_count++;
-        }*/
-
+        
         // .x returns the horizontal position of the sprite
         // If the sprite moves to the left, it will come back to the right.
-        if (player.x() < MIN_X)
+        if (alien.x() < MIN_X)
         {
             // .set_x sets the horizontal position of the sprite
             // just using the max/min/ already available
-            player.set_x(MAX_X);
+            alien.set_x(MAX_X);
         }
 
         // if sprite moves to the right, it will come back on the left
-        if (player.x() > MAX_X)
+        if (alien.x() > MAX_X)
         {
-            player.set_x(MIN_X);
+            alien.set_x(MIN_X);
         }
         // if sprite goes up,will show up again at the bottom
         // .y returns the vertical position of the sprite
-        if (player.y() < MIN_Y)
+        if (alien.y() < MIN_Y)
         {
             // .set_y will set the vertical position of the sprite
-            player.set_y(MAX_Y);
+            alien.set_y(MAX_Y);
         }
         // if sprite goes down it will come back from top of screen
-        if (player.y() > MAX_Y)
+        if (alien.y() > MAX_Y)
         {
-            player.set_y(MIN_Y);
+            alien.set_y(MIN_Y);
         }
         // The bounding boxes of the player and treasure, snapped to integer pixels
-        bn::rect player_rect = bn::rect(player.x().round_integer(),
-                                        player.y().round_integer(),
+        bn::rect player_rect = bn::rect(alien.x().round_integer(),
+                                        alien.y().round_integer(),
                                         PLAYER_SIZE.width(),
                                         PLAYER_SIZE.height());
         bn::rect treasure_rect = bn::rect(treasure.x().round_integer(),
