@@ -16,6 +16,8 @@
 #include "common_fixed_8x16_font.h"
 //#include "bn_sprite_items_variable_8x16_font_red.h"
 
+//add the sound and audio inclusion 
+
 // Pixels / Frame player moves at
 static constexpr bn::fixed SPEED = 3;
 static constexpr bn::fixed new_speed = SPEED * 2;
@@ -184,6 +186,8 @@ int main()
                 bn::backdrop::set_color(bn::color(30, 15, 0));
             }
         }
+
+        //for sound sound_items::alert_play or something like that
         // if the speed boost is active, the player square will change angles and look different
 
                 // if(bn::keypad::right_held()){
