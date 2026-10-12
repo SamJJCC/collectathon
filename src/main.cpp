@@ -15,7 +15,7 @@
 #include "bn_sprite_items_square.h"
 #include "common_fixed_8x16_font.h"
 #include "bn_sprite_items_alien.h"
-//#include "bn_sprite_items_variable_8x16_font_red.h"
+// #include "bn_sprite_items_variable_8x16_font_red.h"
 
 // Pixels / Frame player moves at
 static constexpr bn::fixed SPEED = 3;
@@ -42,11 +42,11 @@ static constexpr int MAX_SPEED_BOOST_CHARS = 11;
 static constexpr int BOOST_FLASH = 11;
 
 // Score location
-static constexpr int SCORE_X = 70;
+static constexpr int SCORE_X = 63;
 static constexpr int SCORE_Y = -70;
 
-static constexpr int SPEEDCOUNT_X = -70;
-static constexpr int SPEEDCOUNT_Y = 70;
+static constexpr int SPEEDCOUNT_X = 63;
+static constexpr int SPEEDCOUNT_Y = -60;
 
 int main()
 {
@@ -68,7 +68,7 @@ int main()
     int speed_boost_count = 3;
     bool speed_boost_activate = false;
 
-   //bn::sprite_ptr alien=bn::sprite_items::alien.create_sprite();
+    // bn::sprite_ptr alien=bn::sprite_items::alien.create_sprite();
 
     bn::sprite_ptr alien = bn::sprite_items::alien.create_sprite(alien_x, alien_y);
     bn::sprite_ptr treasure = bn::sprite_items::dot.create_sprite(treasure_x, treasure_y);
@@ -187,7 +187,7 @@ int main()
                 bn::backdrop::set_color(bn::color(30, 15, 0));
             }
         }
-        
+
         // .x returns the horizontal position of the sprite
         // If the sprite moves to the left, it will come back to the right.
         if (alien.x() < MIN_X)
@@ -236,13 +236,15 @@ int main()
         }
 
         // Update score display
-        bn::string<MAX_SCORE_CHARS> score_string = bn::to_string<MAX_SCORE_CHARS>(score);
+        bn::string<MAX_SCORE_CHARS> score_string = "SCORE:";
+        score_string += bn::to_string<MAX_SCORE_CHARS>(score);
         score_sprites.clear();
         text_generator.generate(SCORE_X, SCORE_Y,
                                 score_string,
                                 score_sprites);
 
-        bn::string<MAX_SPEED_BOOST_CHARS> speedboost_string = bn::to_string<MAX_SPEED_BOOST_CHARS>(speed_boost_count);
+        bn::string<MAX_SPEED_BOOST_CHARS> speedboost_string = "BOOST:";
+        speedboost_string += bn::to_string<MAX_SPEED_BOOST_CHARS>(speed_boost_count);
         speed_boosts.clear();
         text_generator.generate(SPEEDCOUNT_X, SPEEDCOUNT_Y,
                                 speedboost_string,
