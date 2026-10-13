@@ -274,8 +274,8 @@ int main()
             // ends game if they collide
             game_over=true;
             // displays text
-            text_generator.generate(0,0,"GAME OVER", game_over_text);
-            text_generator.generate(-80,20,"PRESS START TO PLAY AGAIN", game_over_text);
+            text_generator.generate(-40,0,"GAME OVER", game_over_text);
+            text_generator.generate(-100,20,"PRESS START TO PLAY AGAIN", game_over_text);
 
         }
 
