@@ -16,6 +16,7 @@
 #include "common_fixed_8x16_font.h"
 #include "bn_sprite_items_alien.h"
 #include "bn_sprite_items_moon.h"
+#include "bn_sprite_items_asteroid.h"
 // #include "bn_sprite_items_variable_8x16_font_red.h"
 
 //add the sound and audio inclusion 
@@ -27,12 +28,14 @@ static constexpr bn::fixed new_speed = SPEED * 2;
 // Width and height of the the player and treasure bounding boxes
 static constexpr bn::size PLAYER_SIZE = {16, 16};
 static constexpr bn::size MOON_SIZE = {8, 8};
+static constexpr bn::size ASTEROID_SIZE ={8,8};
 
 // changing player and treasure position
 static constexpr int alien_x = 50;
 static constexpr int alien_y = -30;
 static constexpr int moon_x = -30;
 static constexpr int moon_y = 20;
+
 // Full bounds of the screen
 static constexpr int MIN_Y = -bn::display::height() / 2;
 static constexpr int MAX_Y = bn::display::height() / 2;
@@ -75,6 +78,7 @@ int main()
 
     bn::sprite_ptr alien = bn::sprite_items::alien.create_sprite(alien_x, alien_y);
     bn::sprite_ptr moon = bn::sprite_items::moon.create_sprite(moon_x, moon_y);
+    bn::sprite_ptr asteroid = bn::sprite_items::asteroid.create_sprite(asteroid_x, asteroid_y);
 
     while (true)
     {
