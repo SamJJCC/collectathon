@@ -15,6 +15,7 @@
 #include "bn_sprite_items_square.h"
 #include "common_fixed_8x16_font.h"
 #include "bn_sprite_items_alien.h"
+#include "bn_sprite_items_moon.h"
 // #include "bn_sprite_items_variable_8x16_font_red.h"
 
 //add the sound and audio inclusion 
@@ -25,13 +26,13 @@ static constexpr bn::fixed new_speed = SPEED * 2;
 
 // Width and height of the the player and treasure bounding boxes
 static constexpr bn::size PLAYER_SIZE = {16, 16};
-static constexpr bn::size TREASURE_SIZE = {8, 8};
+static constexpr bn::size MOON_SIZE = {8, 8};
 
 // changing player and treasure position
 static constexpr int alien_x = 50;
 static constexpr int alien_y = -30;
-static constexpr int treasure_x = -30;
-static constexpr int treasure_y = 20;
+static constexpr int moon_x = -30;
+static constexpr int moon_y = 20;
 // Full bounds of the screen
 static constexpr int MIN_Y = -bn::display::height() / 2;
 static constexpr int MAX_Y = bn::display::height() / 2;
@@ -73,7 +74,7 @@ int main()
     // bn::sprite_ptr alien=bn::sprite_items::alien.create_sprite();
 
     bn::sprite_ptr alien = bn::sprite_items::alien.create_sprite(alien_x, alien_y);
-    bn::sprite_ptr treasure = bn::sprite_items::dot.create_sprite(treasure_x, treasure_y);
+    bn::sprite_ptr moon = bn::sprite_items::moon.create_sprite(moon_x, moon_y);
 
     while (true)
     {
@@ -137,7 +138,7 @@ int main()
             timer = 0;
             speed_boost_activate = false;
             alien.set_position(alien_x, alien_y);
-            treasure.set_position(treasure_x, treasure_y);
+            moon.set_position(moon_x, moon_y);
             alien.set_rotation_angle(0);
             bn::backdrop::set_color(bn::color(30, 15, 0));
         }
@@ -246,18 +247,18 @@ int main()
                                         alien.y().round_integer(),
                                         PLAYER_SIZE.width(),
                                         PLAYER_SIZE.height());
-        bn::rect treasure_rect = bn::rect(treasure.x().round_integer(),
-                                          treasure.y().round_integer(),
-                                          TREASURE_SIZE.width(),
-                                          TREASURE_SIZE.height());
+        bn::rect moon_rect = bn::rect(moon.x().round_integer(),
+                                          moon.y().round_integer(),
+                                          MOON_SIZE.width(),
+                                          MOON_SIZE.height());
 
         // If the bounding boxes overlap, set the treasure to a new location an increase score
-        if (player_rect.intersects(treasure_rect))
+        if (player_rect.intersects(moon_rect))
         {
             // Jump to any random point in the screen
             int new_x = rng.get_int(MIN_X, MAX_X);
             int new_y = rng.get_int(MIN_Y, MAX_Y);
-            treasure.set_position(new_x, new_y);
+            moon.set_position(new_x, new_y);
 
             score++;
         }
